@@ -25,7 +25,7 @@ int main (void)
     char  ch;
     
     for (i = 0; i < 3; i++){
-        for (j = 0; j <MAX_DIGITS * 4 - 1; j++){
+        for (j = 0; j < MAX_DIGITS * 4 - 1; j++){
             digits [i][j] = ' ';
         }
     }
