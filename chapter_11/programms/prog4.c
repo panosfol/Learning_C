@@ -6,27 +6,28 @@
 #define NUM_SUITS 4
 #define NUM_CARDS 5
 
-int num_in_rank [NUM_RANKS];
-int num_in_suit [NUM_SUITS];
-bool straight, flush, four, three;
-int pairs;
 
-void read_cards (void);
-void analyze_hand (void);
-void print_result (void);
+void read_cards (int [],int []);
+void analyze_hand (int num_in_rank [], int num_in_suit [], bool *straight, bool *flush, bool *four, bool *three, int *pairs);
+void print_result (bool *straight, bool *flush, bool *four, bool *three, int *pairs);
 
 int main(void)
 {
+    int num_in_rank [NUM_RANKS];
+    int num_in_suit [NUM_SUITS];
+    bool straight, flush, four, three;
+    int pairs;
+
     for (;;){
-        read_cards ();
-        analyze_hand ();
-        print_result ();
+        read_cards (num_in_rank, num_in_suit);
+        analyze_hand (num_in_rank, num_in_suit, &straight, &flush, &four, &three, &pairs);
+        print_result (&straight, &flush, &four, &three, &pairs);
     }
 }
 
-void read_cards (void)
+void read_cards (int num_in_rank[NUM_RANKS], int num_in_suit[NUM_SUITS])
 {
-    bool card_exsts [NUM_RANKS][NUM_SUITS];
+    bool card_exists [NUM_RANKS][NUM_SUITS];
     char ch, rank_ch, suit_ch;
     int rank, suit;
     bool bad_card;
@@ -59,7 +60,7 @@ void read_cards (void)
             case 'j': case 'J': rank = 9; break;
             case 'q': case 'Q': rank = 10; break;
             case 'k': case 'K': rank = 11; break;
-            case 'a': case 'A': rank 12; break;
+            case 'a': case 'A': rank = 12; break;
             default:        bad_card = true;
         }
         suit_ch = getchar ();
@@ -85,46 +86,48 @@ void read_cards (void)
         }
     }
 }
-void analyze_hand (void)
+
+void analyze_hand (int num_in_rank[NUM_RANKS], int num_in_suit[NUM_SUITS], bool *straight, bool *flush, bool *four, bool *three, int *pairs)
 {
     int num_consec = 0;
     int rank, suit;
 
-    straight = false;
-    flush = false;
-    four = false;
-    three = false;
-    pairs = 0;
+    *straight = false;
+    *flush = false;
+    *four = false;
+    *three = false;
+
 
     for (suit = 0; suit < NUM_SUITS; suit++)
         if (num_in_suit [suit] == NUM_CARDS)
-            flush = true;
+            *flush = true;
     rank = 0;
     while (num_in_rank [rank] == 0) rank++;
     for (; rank < NUM_RANKS && num_in_rank [rank] > 0; rank++)
         num_consec++;
     if (num_consec == NUM_CARDS) {
-        straight = true;
+        *straight = true;
         return;
     }
 
     for (rank = 0; rank < NUM_RANKS; rank++) {
-        if (num_in_rank [rank] == 4) four = true;
-        if (num_in_rank [rank] == 3) three = true;
-        if (num_in_rank [rank] == 2) pairs++;
+        if (num_in_rank [rank] == 4) *four = true;
+        if (num_in_rank [rank] == 3) *three = true;
+        if (num_in_rank [rank] == 2) *pairs = *pairs + 1;
     }
 }
-void print_result (void)
+
+void print_result (bool *straight, bool *flush, bool *four, bool *three, int *pairs)
 {
-    if (straight && flush) printf ("Straight flush");
-    else if (four)         printf ("Four of a kind");
-    else if (three &&
-             pairs == 1)   printf ("Full house");
-    else if (flush)        printf ("Flush");
-    else if (straight)     printf ("Straight");
-    else if (three)        printf ("Three of a kind");
-    else if (pairs == 2)   printf ("Two pairs");
-    else if (pairs == 1)   printf ("Pair");
+    if (*straight && *flush) printf ("Straight flush");
+    else if (*four)         printf ("Four of a kind");
+    else if (*three &&
+             *pairs == 1)   printf ("Full house");
+    else if (*flush)        printf ("Flush");
+    else if (*straight)     printf ("Straight");
+    else if (*three)        printf ("Three of a kind");
+    else if (*pairs == 2)   printf ("Two pairs");
+    else if (*pairs == 1)   printf ("Pair");
     else                   printf ("High card");
 
     printf ("\n\n");
