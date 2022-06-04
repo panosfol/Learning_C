@@ -75,7 +75,7 @@ void read_cards (int num_in_rank[NUM_RANKS], int num_in_suit[NUM_SUITS])
             if (ch != ' ') bad_card = true;
 
         if (bad_card)
-            printf ("Bad_card; ignored. \n");
+            printf ("Bad card; ignored. \n");
         else if (card_exists [rank][suit])
             printf ("Duplicate card; ignored. \n");
         else {
@@ -132,5 +132,3 @@ void print_result (bool *straight, bool *flush, bool *four, bool *three, int *pa
 
     printf ("\n\n");
 }
-
-
