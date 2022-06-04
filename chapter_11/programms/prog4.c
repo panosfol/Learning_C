@@ -132,3 +132,5 @@ void print_result (bool *straight, bool *flush, bool *four, bool *three, int *pa
 
     printf ("\n\n");
 }
+
+
